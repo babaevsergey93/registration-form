@@ -1,20 +1,22 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import './Form.css';
+import { addUser } from '../../actions/index';
 
 class Form extends React.Component {
     handleSubmit = () => {
-      this.props.addUser(
-          this.name.value,
-          this.surname.value,
-          this.email.value,
-          this.password.value,
-      );
+        const name = this.name.value;
+        const surname = this.surname.value;
+        const email = this.email.value;
+        const password = this.password.value;
+
+        // вызываю метод
+        this.props.addUser(name, surname, email, password);
     };
     render() {
         return (
             <div>
                 <form className="form" onSubmit = {(e) => {
-                    this.handleSubmit();
                     e.preventDefault();
                 }}>
                     <input ref={(input) => this.name = input} className='form-input' type="text" placeholder='Имя'/>
@@ -22,11 +24,18 @@ class Form extends React.Component {
                     <input ref={(input) => this.email = input} className='form-input' type="text" placeholder='e-mail'/>
                     <input ref={(input) => this.password = input} className='form-input' type="password" placeholder='Пароль'/>
                     <input className='form-button' type="submit" value='Аторизация'/>
-                    <input className='form-button' type="submit" value='Регистрация' />
+                    <input onClick = {this.handleSubmit} className='form-button' type="submit" value='Регистрация' />
                 </form>
             </div>
         )
     }
 }
 
-export default Form;
+const mapStateToProps = (store) => ({
+    users: []
+});
+const mapDispatchToProps = (dispatch) => ( {
+    addUser: (name, surname, email, password) => dispatch(addUser(name, surname, email, password))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form);
