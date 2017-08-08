@@ -13,6 +13,11 @@ class Form extends React.Component {
         // вызываю метод
         this.props.addUser(name, surname, email, password);
     };
+
+    checkUser = () => {
+        console.log(this.props.users.forEach(item => console.log(item)))
+    };
+
     render() {
         return (
             <div>
@@ -23,7 +28,7 @@ class Form extends React.Component {
                     <input ref={(input) => this.surname = input} className='form-input' type="text" placeholder='Фамилия'/>
                     <input ref={(input) => this.email = input} className='form-input' type="text" placeholder='e-mail'/>
                     <input ref={(input) => this.password = input} className='form-input' type="password" placeholder='Пароль'/>
-                    <input className='form-button' type="submit" value='Аторизация'/>
+                    <input onClick = {this.checkUser} className='form-button' type="submit" value='Аторизация'/>
                     <input onClick = {this.handleSubmit} className='form-button' type="submit" value='Регистрация' />
                 </form>
             </div>
@@ -32,7 +37,7 @@ class Form extends React.Component {
 }
 
 const mapStateToProps = (store) => ({
-    users: []
+    users: store.users
 });
 const mapDispatchToProps = (dispatch) => ( {
     addUser: (name, surname, email, password) => dispatch(addUser(name, surname, email, password))
