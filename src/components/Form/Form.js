@@ -16,7 +16,6 @@ function gotError(err) {
 }
 
 function User(args) {
-    debugger;
     args = args || {};
     this.name = args.name;
     this.surname = args.surname;
@@ -28,8 +27,6 @@ class Form extends React.Component {
 
 
     handleSubmit = () => {
-
-        debugger;
         // create user
         const userObject = new User({
             name: this.name.value,
@@ -39,7 +36,7 @@ class Form extends React.Component {
         });
 
         const savedUser = Backendless.Persistence.of(User).save(userObject);
-        console.log(savedUser);
+
         // reset fields
         this.name.value = '';
         this.surname.value = '';
