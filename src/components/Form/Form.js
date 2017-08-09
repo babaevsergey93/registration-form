@@ -15,27 +15,19 @@ function gotError(err) {
     console.log("error code - " + err.statusCode);
 }
 
-function User(args) {
-    args = args || {};
-    this.name = args.name;
-    this.surname = args.surname;
-    this.email = args.email;
-    this.password = args.password;
-}
 
 class Form extends React.Component {
 
-
     handleSubmit = () => {
         // create user
-        const userObject = new User({
-            name: this.name.value,
-            surname: this.surname.value,
-            email: this.email.value,
-            password: this.password.value
-        });
+        const user = new Backendless.User();
+              user.name = this.name.value;
+              user.surname = this.surname.value;
+              user.email = this.email.value;
+              user.password = this.password.value;
 
-        const savedUser = Backendless.Persistence.of(User).save(userObject);
+        // put user in database
+        Backendless.UserService.register(user).then(userRegistered).catch(gotError);
 
         // reset fields
         this.name.value = '';
