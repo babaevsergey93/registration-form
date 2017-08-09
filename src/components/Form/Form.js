@@ -2,16 +2,38 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './Form.css';
 import { addUser } from '../../actions/index';
+import Backendless from 'backendless';
+
+// handle success
+function userRegistered(user) {
+    console.log("user has registered");
+}
+
+// handle error
+function gotError(err) {
+    console.log("error message - " + err.message);
+    console.log("error code - " + err.statusCode);
+}
+
 
 class Form extends React.Component {
     handleSubmit = () => {
-        const name = this.name.value;
-        const surname = this.surname.value;
-        const email = this.email.value;
-        const password = this.password.value;
+        // create user
+        const user = new Backendless.User();
+              user.name = this.name.value;
+              user.surname = this.surname.value;
+              user.email = this.email.value;
+              user.password = this.password.value;
 
+        // put user in database
+        Backendless.UserService.register(user).then(userRegistered).catch(gotError);
         // вызываю метод
-        this.props.addUser(name, surname, email, password);
+        // this.props.addUser(name, surname, email, password);
+
+        this.name.value = '';
+        this.surname.value = '';
+        this.email.value = '';
+        this.password.value = '';
     };
 
     checkUser = () => {
