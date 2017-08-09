@@ -27,9 +27,8 @@ class Form extends React.Component {
 
         // put user in database
         Backendless.UserService.register(user).then(userRegistered).catch(gotError);
-        // вызываю метод
-        // this.props.addUser(name, surname, email, password);
 
+        // reset fields
         this.name.value = '';
         this.surname.value = '';
         this.email.value = '';
