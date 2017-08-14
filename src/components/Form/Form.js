@@ -4,36 +4,85 @@ import './Form.css';
 import { addUser } from '../../actions/index';
 import Backendless from 'backendless';
 
-// handle success
-function userRegistered(user) {
-    console.log("user has registered");
-}
 
-// handle error
-function gotError(err) {
-    console.log("error message - " + err.message);
-    console.log("error code - " + err.statusCode);
-}
 
 
 class Form extends React.Component {
 
-    handleSubmit = () => {
-        // create user
-        const user = new Backendless.User();
-              user.name = this.name.value;
-              user.surname = this.surname.value;
-              user.email = this.email.value;
-              user.password = this.password.value;
-
-        // put user in database
-        Backendless.UserService.register(user).then(userRegistered).catch(gotError);
-
-        // reset fields
+    resetFields = () => {
         this.name.value = '';
         this.surname.value = '';
         this.email.value = '';
         this.password.value = '';
+    };
+
+    getAllUsers = () => {
+        const queryBuilder = Backendless.DataQueryBuilder.create();
+        console.log(queryBuilder);
+        getUsers( queryBuilder );
+
+        function getUsers( queryBuilder ) {
+            Backendless.Persistence.of("User").find( queryBuilder )
+                .then( handleResult )
+                .catch( handleError );
+        }
+
+        function handleResult( users ) {
+            printUsers( users );
+
+            if( users.length > 0 ) {
+                queryBuilder.prepareNextPage();
+                getUsers( queryBuilder );
+            }
+            else {
+                console.log( "Reached the end of collection" );
+            }
+        }
+
+        function handleError( error ) {
+            console.log( "Server reported an error - " );
+            console.log( error.message );
+            console.log( error.errorCode );
+        }
+
+        function printUsers( usersCollection ) {
+            console.log( "Loaded " + usersCollection.length +
+                " users in the current page" );
+
+            for( let i in usersCollection )
+                console.log( "\t" + usersCollection[ i ].name );
+        }
+    };
+
+
+    createUser = () => {
+        const user = new Backendless.User();
+        user.name = this.name.value;
+        user.surname = this.surname.value;
+        user.email = this.email.value;
+        user.password = this.password.value;
+
+        // put user in database
+        Backendless.Data.of( "User" ).save( user )
+            .then( function( obj ) {
+                console.log( "object saved. objectId " + obj.objectId )
+            } )
+            .catch( function( error ) {
+                console.log( "got error - " + error )
+            })
+    };
+
+    handleSubmit = () => {
+        // create user
+
+        // this.createUser();
+
+        // get database
+        this.getAllUsers();
+
+        // reset fields
+        this.resetFields();
+
     };
 
     checkUser = () => {

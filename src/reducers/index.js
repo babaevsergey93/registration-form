@@ -18,8 +18,6 @@ export default function reducer(state = initialState, action) {
                     }
                 ]
             });
-        case 'CHECK_USER':
-            console.log('Проверка юзера используя айдишник');
         default:
             return state;
     }
