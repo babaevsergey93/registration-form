@@ -8,8 +8,3 @@ export const addUser = (name, surname, email, password) => ({
    email,
    password
 });
-
-export const checkUser = (id) => ({
-    type: 'CHECK_USER',
-    id
-});

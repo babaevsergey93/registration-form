@@ -1,12 +1,18 @@
 import React from 'react';
-import Form from '../components/Form/Form';
+import { Switch, Route } from 'react-router-dom'
+import Main from '../components/Main/Main'
+import RegistrationForm from '../components/Registration/Registration';
+import AuthorizationForm from '../components/Authorization/Authorization';
+
 
 export default class App extends React.Component {
     render() {
         return (
-            <div>
-                <Form/>
-            </div>
+            <Switch>
+                <Route exact path='/' component={Main} />
+                <Route path="/authorization" component={AuthorizationForm} />
+                <Route path="/registration" component={RegistrationForm} />
+            </Switch>
         )
     }
 };
