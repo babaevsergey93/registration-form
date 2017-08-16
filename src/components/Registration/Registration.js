@@ -1,5 +1,7 @@
 import React from 'react';
 import Backendless from 'backendless';
+import { connect } from 'react-redux';
+import { userLogged } from '../../actions/index';
 
 class Registration extends React.Component {
     resetFields = () => {
@@ -9,13 +11,16 @@ class Registration extends React.Component {
         this.password.value = '';
     };
 
+
+    makeTru = () => {
+        this.props.userLogged();
+    };
     userWasRegistred = () => {
         Backendless.Files.listing('/media', '*.jpg', false, null, null)
-            .then( function( fileInfoArray ) {
-                fileInfoArray.forEach(item => console.log(item));
-                console.log('We are get the images array')
-            })
+            .then( function( fileInfoArray){})
+            .then(this.makeTru)
             .catch( function( error ) {
+                debugger;
             });
     };
 
@@ -28,6 +33,7 @@ class Registration extends React.Component {
             .then(this.userWasRegistred())
             .catch( function( error ) {
                 console.log('User was not authorized' + error)
+                debugger;
             });
     };
 
@@ -42,7 +48,7 @@ class Registration extends React.Component {
         Backendless.UserService.register( user )
             .then( function( registeredUser ) {console.log('User was registred')})
             // Зарегались. Давай и авторизацию запилим. Причем работало а потом отъебнулось, очень странная хуйня.
-            .then( this.authorithation())
+            .then( this.authorithation)
             .catch( function( error ) {console.error('User was not registred')});
     };
 
@@ -63,4 +69,16 @@ class Registration extends React.Component {
     }
 };
 
-export default Registration;
+const mapStateToProps = (state) => ({
+   user: state
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    userLogged: () => dispatch(userLogged())
+});
+
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(Registration);

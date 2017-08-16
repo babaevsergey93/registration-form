@@ -1,22 +1,15 @@
 const initialState = {
-    users: []
+    user: {},
+    authorized: false,
 };
 
 
 export default function reducer(state = initialState, action) {
     switch(action.type) {
-        case 'ADD_USER':
+        case 'USER_LOGGED':
+            debugger;
             return Object.assign({}, state, {
-                users: [
-                    ...state.users,
-                    {
-                        id: action.id,
-                        name: action.name,
-                        surname: action.surname,
-                        email: action.email,
-                        password: action.password
-                    }
-                ]
+                authorized: !state.authorized
             });
         default:
             return state;
